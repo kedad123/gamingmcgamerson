@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM_ROOT // GAMES</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --term-green: #00ff41;
+            --term-dim: #008f11;
+            --term-alert: #ff3333;
+            --scan-line: rgba(0, 255, 65, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--term-green);
+            font-family: 'Courier New', Courier, monospace;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* Scanline effect */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.2) 50%,
+                    rgba(0, 0, 0, 0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .sidebar {
+            width: 350px;
+            border-right: 2px solid var(--term-dim);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 20, 0, 0.3);
+        }
+
+        .main-display {
+            flex-grow: 1;
+            padding: 3rem;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px dashed var(--term-dim);
+            padding-bottom: 1rem;
+        }
+
+        .game-list {
+            list-style: none;
+        }
+
+        .game-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .game-item:hover,
+        .game-item.active {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid var(--term-green);
+            text-shadow: 0 0 5px var(--term-green);
+        }
+
+        .game-item::before {
+            content: ">";
+            margin-right: 10px;
+            opacity: 0;
+        }
+
+        .game-item:hover::before,
+        .game-item.active::before {
+            opacity: 1;
+        }
+
+        .status-bar {
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: var(--term-dim);
+            border-top: 1px solid var(--term-dim);
+            padding-top: 1rem;
+        }
+
+        /* Preview Area */
+        .preview-container {
+            border: 2px solid var(--term-green);
+            height: 400px;
+            margin-bottom: 2rem;
+            position: relative;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .preview-placeholder {
+            font-size: 5rem;
+            opacity: 0.5;
+            animation: glitch 1s infinite alternate;
+        }
+
+        .game-details h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .game-details p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            background: var(--term-green);
+            color: #000;
+            border: none;
+            padding: 1rem 3rem;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .action-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 20px var(--term-green);
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: skew(0deg);
+            }
+
+            20% {
+                transform: skew(-2deg);
+            }
+
+            40% {
+                transform: skew(2deg);
+            }
+
+            60% {
+                transform: skew(-1deg);
+            }
+
+            80% {
+                transform: skew(1deg);
+            }
+
+            100% {
+                transform: skew(0deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h1>ROOT_ACCESS //</h1>
+        <ul class="game-list">
+            <li class="game-item active" onclick="selectGame('snake')">01_SNAKE.EXE</li>
+            <li class="game-item" onclick="selectGame('space')">02_SPACE_DEF.EXE</li>
+            <li class="game-item" onclick="selectGame('puzzle')">03_BLOCKS.DAT</li>
+            <li class="game-item" onclick="selectGame('racer')">04_RACER_V2.BIN</li>
+            <li class="game-item" onclick="selectGame('rpg')">05_QUEST.LOG</li>
+        </ul>
+        <div class="status-bar">
+            MEM: 64KB OK<br>
+            CPU: 10%<br>
+            NET: CONNECTED
+        </div>
+    </div>
+
+    <div class="main-display">
+        <div class="game-details" id="game-details">
+            <div class="preview-container">
+                <div class="preview-placeholder" id="preview-icon">🐍</div>
+            </div>
+            <h2 id="game-title">SNAKE.EXE</h2>
+            <p id="game-desc">
+                INITIALIZING REPTILE SIMULATION SEQUENCE...<br>
+                OBJECTIVE: CONSUME DATA BITS.<br>
+                AVOID: SELF-COLLISION AND BOUNDARY VIOLATIONS.
+            </p>
+            <button class="action-btn">EXECUTE PROGRAM <span class="blink">_</span></button>
+        </div>
+    </div>
+
+    <script>
+        const games = {
+            'snake': { title: 'SNAKE.EXE', icon: '🐍', desc: 'INITIALIZING REPTILE SIMULATION SEQUENCE...<br>OBJECTIVE: CONSUME DATA BITS.<br>AVOID: SELF-COLLISION AND BOUNDARY VIOLATIONS.' },
+            'space': { title: 'SPACE_DEF.EXE', icon: '🚀', desc: 'WARNING: HOSTILE ENTITIES DETECTED IN SECTOR 7.<br>DEPLOYING DEFENSE PROTOCOLS.<br>LASER SYSTEMS ONLINE.' },
+            'puzzle': { title: 'BLOCKS.DAT', icon: '🧩', desc: 'DEFRAGMENTATION REQUIRED.<br>ALIGN DATA BLOCKS TO CLEAR MEMORY SECTORS.<br>OPTIMIZATION IN PROGRESS.' },
+            'racer': { title: 'RACER_V2.BIN', icon: '🏎️', desc: 'HIGH VELOCITY DATA TRANSFER.<br>NAVIGATE THE INFORMATION SUPERHIGHWAY.<br>SPEED: UNLIMITED.' },
+            'rpg': { title: 'QUEST.LOG', icon: '⚔️', desc: 'LOADING FANTASY SIMULATION...<br>CHARACTER CREATION PENDING.<br>PREPARE FOR ADVENTURE.' }
+        };
+
+        function selectGame(key) {
+            // Update active state
+            document.querySelectorAll('.game-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Update content
+            const game = games[key];
+            document.getElementById('game-title').innerText = game.title;
+            document.getElementById('preview-icon').innerText = game.icon;
+            document.getElementById('game-desc').innerHTML = game.desc;
+        }
+    </script>
+</body>
+
+</html>

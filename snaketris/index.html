@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snaketris</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <div class="game-container">
+            <div class="ui-overlay" id="start-screen">
+                <h1>SNAKETRIS</h1>
+                <p>Use Arrow Keys to Move</p>
+                <p>Eat Blocks to Survive</p>
+                <div class="menu-buttons">
+                    <button id="start-btn">START GAME</button>
+                    <button id="settings-btn" class="secondary-btn">SETTINGS</button>
+                </div>
+            </div>
+
+            <div class="ui-overlay hidden" id="settings-screen">
+                <h2>SETTINGS</h2>
+                <div class="settings-grid">
+                    <label>Snake Speed <span id="val-snake-speed">200</span>ms</label>
+                    <input type="range" id="opt-snake-speed" min="50" max="500" step="10" value="200">
+
+                    <label>Tetris Speed <span id="val-tetris-speed">1000</span>ms</label>
+                    <input type="range" id="opt-tetris-speed" min="100" max="2000" step="50" value="1000">
+
+                    <label>Snake Start Size <span id="val-snake-size">1</span></label>
+                    <input type="range" id="opt-snake-size" min="1" max="10" step="1" value="1">
+
+                    <label>Grow Rate <span id="val-grow-rate">1</span></label>
+                    <input type="range" id="opt-grow-rate" min="0" max="5" step="1" value="1">
+
+                    <label>Shrink Rate <span id="val-shrink-rate">5</span></label>
+                    <input type="range" id="opt-shrink-rate" min="0" max="5" step="1" value="5">
+
+                    <label>Board Rows <span id="val-rows">20</span></label>
+                    <input type="range" id="opt-rows" min="10" max="30" step="1" value="20">
+
+                    <label>Board Cols <span id="val-cols">10</span></label>
+                    <input type="range" id="opt-cols" min="6" max="20" step="1" value="10">
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="opt-pro-mode" checked>
+                        Pro Mode (Strict Collision)
+                    </label>
+                </div>
+                <button id="save-settings-btn">SAVE & CLOSE</button>
+            </div>
+            <div class="ui-overlay hidden" id="game-over-screen">
+                <h1>GAME OVER</h1>
+                <p>Score: <span id="final-score">0</span></p>
+                <button id="restart-btn">TRY AGAIN</button>
+            </div>
+            <div class="hud">
+                <div class="score-box">
+                    <span class="label">SCORE</span>
+                    <span class="value" id="score">0</span>
+                </div>
+                <div class="level-box">
+                    <span class="label">LEVEL</span>
+                    <span class="value" id="level">1</span>
+                </div>
+            </div>
+            <canvas id="game-canvas" width="300" height="600"></canvas>
+        </div>
+    </div>
+    <script type="module" src="src/main.js"></script>
+</body>
+
+</html>
