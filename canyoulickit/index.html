@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can You Lick It? - Periodic Table Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Can You Lick It?</h1>
+    <div id="status">
+        <p>Lives: <span id="lives">5</span></p>
+        <p>Points: <span id="points">0</span></p>
+        <p>High Score: <span id="highScore">0</span></p>
+    </div>
+    <table id="periodic-table">
+        <!-- Period 1 -->
+        <tr>
+            <td class="element"><span class="number">1</span><br><span class="symbol">H</span><br>Hydrogen</td>
+            <td class="empty" colspan="16"></td>
+            <td class="element"><span class="number">2</span><br><span class="symbol">He</span><br>Helium</td>
+        </tr>
+        <!-- Period 2 -->
+        <tr>
+            <td class="element"><span class="number">3</span><br><span class="symbol">Li</span><br>Lithium</td>
+            <td class="element"><span class="number">4</span><br><span class="symbol">Be</span><br>Beryllium</td>
+            <td class="empty" colspan="10"></td>
+            <td class="element"><span class="number">5</span><br><span class="symbol">B</span><br>Boron</td>
+            <td class="element"><span class="number">6</span><br><span class="symbol">C</span><br>Carbon</td>
+            <td class="element"><span class="number">7</span><br><span class="symbol">N</span><br>Nitrogen</td>
+            <td class="element"><span class="number">8</span><br><span class="symbol">O</span><br>Oxygen</td>
+            <td class="element"><span class="number">9</span><br><span class="symbol">F</span><br>Fluorine</td>
+            <td class="element"><span class="number">10</span><br><span class="symbol">Ne</span><br>Neon</td>
+        </tr>
+        <!-- Period 3 -->
+        <tr>
+            <td class="element"><span class="number">11</span><br><span class="symbol">Na</span><br>Sodium</td>
+            <td class="element"><span class="number">12</span><br><span class="symbol">Mg</span><br>Magnesium</td>
+            <td class="empty" colspan="10"></td>
+            <td class="element"><span class="number">13</span><br><span class="symbol">Al</span><br>Aluminum</td>
+            <td class="element"><span class="number">14</span><br><span class="symbol">Si</span><br>Silicon</td>
+            <td class="element"><span class="number">15</span><br><span class="symbol">P</span><br>Phosphorus</td>
+            <td class="element"><span class="number">16</span><br><span class="symbol">S</span><br>Sulfur</td>
+            <td class="element"><span class="number">17</span><br><span class="symbol">Cl</span><br>Chlorine</td>
+            <td class="element"><span class="number">18</span><br><span class="symbol">Ar</span><br>Argon</td>
+        </tr>
+        <!-- Period 4 -->
+        <tr>
+            <td class="element"><span class="number">19</span><br><span class="symbol">K</span><br>Potassium</td>
+            <td class="element"><span class="number">20</span><br><span class="symbol">Ca</span><br>Calcium</td>
+            <td class="element"><span class="number">21</span><br><span class="symbol">Sc</span><br>Scandium</td>
+            <td class="element"><span class="number">22</span><br><span class="symbol">Ti</span><br>Titanium</td>
+            <td class="element"><span class="number">23</span><br><span class="symbol">V</span><br>Vanadium</td>
+            <td class="element"><span class="number">24</span><br><span class="symbol">Cr</span><br>Chromium</td>
+            <td class="element"><span class="number">25</span><br><span class="symbol">Mn</span><br>Manganese</td>
+            <td class="element"><span class="number">26</span><br><span class="symbol">Fe</span><br>Iron</td>
+            <td class="element"><span class="number">27</span><br><span class="symbol">Co</span><br>Cobalt</td>
+            <td class="element"><span class="number">28</span><br><span class="symbol">Ni</span><br>Nickel</td>
+            <td class="element"><span class="number">29</span><br><span class="symbol">Cu</span><br>Copper</td>
+            <td class="element"><span class="number">30</span><br><span class="symbol">Zn</span><br>Zinc</td>
+            <td class="element"><span class="number">31</span><br><span class="symbol">Ga</span><br>Gallium</td>
+            <td class="element"><span class="number">32</span><br><span class="symbol">Ge</span><br>Germanium</td>
+            <td class="element"><span class="number">33</span><br><span class="symbol">As</span><br>Arsenic</td>
+            <td class="element"><span class="number">34</span><br><span class="symbol">Se</span><br>Selenium</td>
+            <td class="element"><span class="number">35</span><br><span class="symbol">Br</span><br>Bromine</td>
+            <td class="element"><span class="number">36</span><br><span class="symbol">Kr</span><br>Krypton</td>
+        </tr>
+        <!-- Period 5 -->
+        <tr>
+            <td class="element"><span class="number">37</span><br><span class="symbol">Rb</span><br>Rubidium</td>
+            <td class="element"><span class="number">38</span><br><span class="symbol">Sr</span><br>Strontium</td>
+            <td class="element"><span class="number">39</span><br><span class="symbol">Y</span><br>Yttrium</td>
+            <td class="element"><span class="number">40</span><br><span class="symbol">Zr</span><br>Zirconium</td>
+            <td class="element"><span class="number">41</span><br><span class="symbol">Nb</span><br>Niobium</td>
+            <td class="element"><span class="number">42</span><br><span class="symbol">Mo</span><br>Molybdenum</td>
+            <td class="element"><span class="number">43</span><br><span class="symbol">Tc</span><br>Technetium</td>
+            <td class="element"><span class="number">44</span><br><span class="symbol">Ru</span><br>Ruthenium</td>
+            <td class="element"><span class="number">45</span><br><span class="symbol">Rh</span><br>Rhodium</td>
+            <td class="element"><span class="number">46</span><br><span class="symbol">Pd</span><br>Palladium</td>
+            <td class="element"><span class="number">47</span><br><span class="symbol">Ag</span><br>Silver</td>
+            <td class="element"><span class="number">48</span><br><span class="symbol">Cd</span><br>Cadmium</td>
+            <td class="element"><span class="number">49</span><br><span class="symbol">In</span><br>Indium</td>
+            <td class="element"><span class="number">50</span><br><span class="symbol">Sn</span><br>Tin</td>
+            <td class="element"><span class="number">51</span><br><span class="symbol">Sb</span><br>Antimony</td>
+            <td class="element"><span class="number">52</span><br><span class="symbol">Te</span><br>Tellurium</td>
+            <td class="element"><span class="number">53</span><br><span class="symbol">I</span><br>Iodine</td>
+            <td class="element"><span class="number">54</span><br><span class="symbol">Xe</span><br>Xenon</td>
+        </tr>
+        <!-- Period 6 -->
+        <tr>
+            <td class="element"><span class="number">55</span><br><span class="symbol">Cs</span><br>Cesium</td>
+            <td class="element"><span class="number">56</span><br><span class="symbol">Ba</span><br>Barium</td>
+            <td class="element"><span class="number">57</span><br><span class="symbol">La</span><br>Lanthanum</td>
+            <td class="element"><span class="number">72</span><br><span class="symbol">Hf</span><br>Hafnium</td>
+            <td class="element"><span class="number">73</span><br><span class="symbol">Ta</span><br>Tantalum</td>
+            <td class="element"><span class="number">74</span><br><span class="symbol">W</span><br>Tungsten</td>
+            <td class="element"><span class="number">75</span><br><span class="symbol">Re</span><br>Rhenium</td>
+            <td class="element"><span class="number">76</span><br><span class="symbol">Os</span><br>Osmium</td>
+            <td class="element"><span class="number">77</span><br><span class="symbol">Ir</span><br>Iridium</td>
+            <td class="element"><span class="number">78</span><br><span class="symbol">Pt</span><br>Platinum</td>
+            <td class="element"><span class="number">79</span><br><span class="symbol">Au</span><br>Gold</td>
+            <td class="element"><span class="number">80</span><br><span class="symbol">Hg</span><br>Mercury</td>
+            <td class="element"><span class="number">81</span><br><span class="symbol">Tl</span><br>Thallium</td>
+            <td class="element"><span class="number">82</span><br><span class="symbol">Pb</span><br>Lead</td>
+            <td class="element"><span class="number">83</span><br><span class="symbol">Bi</span><br>Bismuth</td>
+            <td class="element"><span class="number">84</span><br><span class="symbol">Po</span><br>Polonium</td>
+            <td class="element"><span class="number">85</span><br><span class="symbol">At</span><br>Astatine</td>
+            <td class="element"><span class="number">86</span><br><span class="symbol">Rn</span><br>Radon</td>
+        </tr>
+        <!-- Period 7 -->
+        <tr>
+            <td class="element"><span class="number">87</span><br><span class="symbol">Fr</span><br>Francium</td>
+            <td class="element"><span class="number">88</span><br><span class="symbol">Ra</span><br>Radium</td>
+            <td class="element"><span class="number">89</span><br><span class="symbol">Ac</span><br>Actinium</td>
+            <td class="element"><span class="number">104</span><br><span class="symbol">Rf</span><br>Rutherfordium</td>
+            <td class="element"><span class="number">105</span><br><span class="symbol">Db</span><br>Dubnium</td>
+            <td class="element"><span class="number">106</span><br><span class="symbol">Sg</span><br>Seaborgium</td>
+            <td class="element"><span class="number">107</span><br><span class="symbol">Bh</span><br>Bohrium</td>
+            <td class="element"><span class="number">108</span><br><span class="symbol">Hs</span><br>Hassium</td>
+            <td class="element"><span class="number">109</span><br><span class="symbol">Mt</span><br>Meitnerium</td>
+            <td class="element"><span class="number">110</span><br><span class="symbol">Ds</span><br>Darmstadtium</td>
+            <td class="element"><span class="number">111</span><br><span class="symbol">Rg</span><br>Roentgenium</td>
+            <td class="element"><span class="number">112</span><br><span class="symbol">Cn</span><br>Copernicium</td>
+            <td class="element"><span class="number">113</span><br><span class="symbol">Nh</span><br>Nihonium</td>
+            <td class="element"><span class="number">114</span><br><span class="symbol">Fl</span><br>Flerovium</td>
+            <td class="element"><span class="number">115</span><br><span class="symbol">Mc</span><br>Moscovium</td>
+            <td class="element"><span class="number">116</span><br><span class="symbol">Lv</span><br>Livermorium</td>
+            <td class="element"><span class="number">117</span><br><span class="symbol">Ts</span><br>Tennessine</td>
+            <td class="element"><span class="number">118</span><br><span class="symbol">Og</span><br>Oganesson</td>
+        </tr>
+    </table>
+    <table>
+        <!-- Lanthanides -->
+        <tr>
+            <td class="element lanthanide"><span class="number">58</span><br><span class="symbol">Ce</span><br>Cerium</td>
+            <td class="element lanthanide"><span class="number">59</span><br><span class="symbol">Pr</span><br>Praseodymium</td>
+            <td class="element lanthanide"><span class="number">60</span><br><span class="symbol">Nd</span><br>Neodymium</td>
+            <td class="element lanthanide"><span class="number">61</span><br><span class="symbol">Pm</span><br>Promethium</td>
+            <td class="element lanthanide"><span class="number">62</span><br><span class="symbol">Sm</span><br>Samarium</td>
+            <td class="element lanthanide"><span class="number">63</span><br><span class="symbol">Eu</span><br>Europium</td>
+            <td class="element lanthanide"><span class="number">64</span><br><span class="symbol">Gd</span><br>Gadolinium</td>
+            <td class="element lanthanide"><span class="number">65</span><br><span class="symbol">Tb</span><br>Terbium</td>
+            <td class="element lanthanide"><span class="number">66</span><br><span class="symbol">Dy</span><br>Dysprosium</td>
+            <td class="element lanthanide"><span class="number">67</span><br><span class="symbol">Ho</span><br>Holmium</td>
+            <td class="element lanthanide"><span class="number">68</span><br><span class="symbol">Er</span><br>Erbium</td>
+            <td class="element lanthanide"><span class="number">69</span><br><span class="symbol">Tm</span><br>Thulium</td>
+            <td class="element lanthanide"><span class="number">70</span><br><span class="symbol">Yb</span><br>Ytterbium</td>
+            <td class="element lanthanide"><span class="number">71</span><br><span class="symbol">Lu</span><br>Lutetium</td>
+            <td class="empty" colspan="4"></td>
+        </tr>
+    </table>
+    <table>
+        <!-- Actinides -->
+        <tr>
+            <td class="element actinide"><span class="number">90</span><br><span class="symbol">Th</span><br>Thorium</td>
+            <td class="element actinide"><span class="number">91</span><br><span class="symbol">Pa</span><br>Protactinium</td>
+            <td class="element actinide"><span class="number">92</span><br><span class="symbol">U</span><br>Uranium</td>
+            <td class="element actinide"><span class="number">93</span><br><span class="symbol">Np</span><br>Neptunium</td>
+            <td class="element actinide"><span class="number">94</span><br><span class="symbol">Pu</span><br>Plutonium</td>
+            <td class="element actinide"><span class="number">95</span><br><span class="symbol">Am</span><br>Americium</td>
+            <td class="element actinide"><span class="number">96</span><br><span class="symbol">Cm</span><br>Curium</td>
+            <td class="element actinide"><span class="number">97</span><br><span class="symbol">Bk</span><br>Berkelium</td>
+            <td class="element actinide"><span class="number">98</span><br><span class="symbol">Cf</span><br>Californium</td>
+            <td class="element actinide"><span class="number">99</span><br><span class="symbol">Es</span><br>Einsteinium</td>
+            <td class="element actinide"><span class="number">100</span><br><span class="symbol">Fm</span><br>Fermium</td>
+            <td class="element actinide"><span class="number">101</span><br><span class="symbol">Md</span><br>Mendelevium</td>
+            <td class="element actinide"><span class="number">102</span><br><span class="symbol">No</span><br>Nobelium</td>
+            <td class="element actinide"><span class="number">103</span><br><span class="symbol">Lr</span><br>Lawrencium</td>
+            <td class="empty" colspan="4"></td>
+        </tr>
+    </table>
+    <script src="script.js"></script>
+</body>
+</html>
