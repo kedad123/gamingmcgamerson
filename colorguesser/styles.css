@@ -46,6 +46,33 @@ h1 {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
+.mode-toggle-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mode-toggle {
+    padding: 12px 30px;
+    font-size: 1em;
+    font-weight: 600;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.mode-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.mode-toggle:active {
+    transform: translateY(0);
+}
+
 .score-board {
     display: flex;
     justify-content: space-around;

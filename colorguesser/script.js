@@ -3,67 +3,70 @@ let score = 0;
 let streak = 0;
 let bestStreak = 0;
 let currentCorrectColor = null;
+let currentCorrectIndex = null;
 let hasAnswered = false;
+let gameMode = 'description'; // 'description' or 'name'
 
-// Color database with detailed descriptions
+// Color database with detailed descriptions and names
 const colorData = [
     // Blues
-    { color: '#4169E1', description: 'A vibrant, medium-dark blue that evokes the grandeur of royal robes and majestic crowns. This color has been associated with nobility and dignity throughout history.' },
-    { color: '#87CEEB', description: 'A light, airy blue that captures the essence of a clear afternoon sky. This serene color brings feelings of peace and tranquility, like gazing up on a cloudless day.' },
-    { color: '#000080', description: 'A deep, dark blue that mirrors the depths of the ocean at night. This rich color conveys authority and professionalism, often seen in military and naval uniforms.' },
-    { color: '#ADD8E6', description: 'A soft, pale blue with a gentle, calming quality. This delicate color resembles a morning sky just after dawn, bringing a sense of freshness and new beginnings.' },
-    { color: '#1E90FF', description: 'A brilliant, electric blue that captures the essence of tropical waters and digital displays. This modern, eye-catching color radiates energy and innovation.' },
+    { color: '#4169E1', name: 'Royal Blue', description: 'A vibrant, medium-dark blue that evokes the grandeur of royal robes and majestic crowns. This color has been associated with nobility and dignity throughout history.' },
+    { color: '#87CEEB', name: 'Sky Blue', description: 'A light, airy blue that captures the essence of a clear afternoon sky. This serene color brings feelings of peace and tranquility, like gazing up on a cloudless day.' },
+    { color: '#000080', name: 'Navy Blue', description: 'A deep, dark blue that mirrors the depths of the ocean at night. This rich color conveys authority and professionalism, often seen in military and naval uniforms.' },
+    { color: '#ADD8E6', name: 'Light Blue', description: 'A soft, pale blue with a gentle, calming quality. This delicate color resembles a morning sky just after dawn, bringing a sense of freshness and new beginnings.' },
+    { color: '#1E90FF', name: 'Dodger Blue', description: 'A brilliant, electric blue that captures the essence of tropical waters and digital displays. This modern, eye-catching color radiates energy and innovation.' },
 
     // Reds
-    { color: '#DC143C', description: 'A deep, vivid red with hints of purple, like the color of precious rubies. This intense color embodies passion and luxury, often associated with fine jewelry and romance.' },
-    { color: '#8B0000', description: 'An extremely deep, almost brownish red that resembles aged wine or dried blood. This somber color conveys seriousness and has historical associations with ancient textiles.' },
-    { color: '#FF6347', description: 'A vibrant orange-red that perfectly captures the color of a ripe summer tomato. This fresh, appetizing color brings to mind gardens and healthy, sun-ripened produce.' },
-    { color: '#CD5C5C', description: 'A muted, dusty red with subtle brown undertones. This earthy color resembles terracotta pottery or dried clay bricks from Mediterranean villages.' },
-    { color: '#B22222', description: 'A strong, classic red reminiscent of fire engines and danger signs. This bold color commands attention and is often used to signal warnings or emergencies.' },
+    { color: '#DC143C', name: 'Crimson', description: 'A deep, vivid red with hints of purple, like the color of precious rubies. This intense color embodies passion and luxury, often associated with fine jewelry and romance.' },
+    { color: '#8B0000', name: 'Dark Red', description: 'An extremely deep, almost brownish red that resembles aged wine or dried blood. This somber color conveys seriousness and has historical associations with ancient textiles.' },
+    { color: '#FF6347', name: 'Tomato', description: 'A vibrant orange-red that perfectly captures the color of a ripe summer tomato. This fresh, appetizing color brings to mind gardens and healthy, sun-ripened produce.' },
+    { color: '#CD5C5C', name: 'Indian Red', description: 'A muted, dusty red with subtle brown undertones. This earthy color resembles terracotta pottery or dried clay bricks from Mediterranean villages.' },
+    { color: '#B22222', name: 'Fire Brick', description: 'A strong, classic red reminiscent of fire engines and danger signs. This bold color commands attention and is often used to signal warnings or emergencies.' },
 
     // Greens
-    { color: '#2E8B57', description: 'A medium-dark green that captures the color of the sea in tropical regions. This refreshing color sits between blue and green, evoking coastal waters and marine life.' },
-    { color: '#90EE90', description: 'A soft, pale green like fresh spring leaves just emerging. This gentle color embodies renewal and growth, reminiscent of new grass and budding plants.' },
-    { color: '#228B22', description: 'A pure, vibrant green like a lush forest canopy. This natural color represents the heart of nature, full of life and vitality, often seen in healthy vegetation.' },
-    { color: '#006400', description: 'An extremely deep, almost black green like dense forest shade. This rich color suggests mystery and depth, reminiscent of ancient woodlands and evergreen trees.' },
-    { color: '#9ACD32', description: 'A bright, yellow-tinted green like young grass or chartreuse liqueur. This lively color combines the energy of yellow with the freshness of green.' },
+    { color: '#2E8B57', name: 'Sea Green', description: 'A medium-dark green that captures the color of the sea in tropical regions. This refreshing color sits between blue and green, evoking coastal waters and marine life.' },
+    { color: '#90EE90', name: 'Light Green', description: 'A soft, pale green like fresh spring leaves just emerging. This gentle color embodies renewal and growth, reminiscent of new grass and budding plants.' },
+    { color: '#228B22', name: 'Forest Green', description: 'A pure, vibrant green like a lush forest canopy. This natural color represents the heart of nature, full of life and vitality, often seen in healthy vegetation.' },
+    { color: '#006400', name: 'Dark Green', description: 'An extremely deep, almost black green like dense forest shade. This rich color suggests mystery and depth, reminiscent of ancient woodlands and evergreen trees.' },
+    { color: '#9ACD32', name: 'Yellow Green', description: 'A bright, yellow-tinted green like young grass or chartreuse liqueur. This lively color combines the energy of yellow with the freshness of green.' },
 
     // Yellows
-    { color: '#FFD700', description: 'A rich, lustrous yellow that perfectly mimics precious metal. This warm, valuable color has adorned crowns, coins, and treasures throughout history.' },
-    { color: '#FFFF00', description: 'A pure, intense yellow at maximum brightness. This eye-catching color is used for highlighters and caution signs, demanding immediate attention.' },
-    { color: '#F0E68C', description: 'A pale, soft yellow like dried wheat or desert sand. This warm, natural color evokes prairies and beaches, bringing a sense of warmth and nostalgia.' },
-    { color: '#BDB76B', description: 'A muted, olive-tinted yellow with green undertones. This earthy color resembles dried grass or aged parchment, suggesting autumn and natural materials.' },
+    { color: '#FFD700', name: 'Gold', description: 'A rich, lustrous yellow that perfectly mimics precious metal. This warm, valuable color has adorned crowns, coins, and treasures throughout history.' },
+    { color: '#FFFF00', name: 'Yellow', description: 'A pure, intense yellow at maximum brightness. This eye-catching color is used for highlighters and caution signs, demanding immediate attention.' },
+    { color: '#F0E68C', name: 'Khaki', description: 'A pale, soft yellow like dried wheat or desert sand. This warm, natural color evokes prairies and beaches, bringing a sense of warmth and nostalgia.' },
+    { color: '#BDB76B', name: 'Dark Khaki', description: 'A muted, olive-tinted yellow with green undertones. This earthy color resembles dried grass or aged parchment, suggesting autumn and natural materials.' },
 
     // Purples
-    { color: '#9370DB', description: 'A soft, muted purple with blue undertones, like mountain ranges at twilight. This dreamy color blends the calm of blue with the mystery of purple.' },
-    { color: '#8B008B', description: 'A deep, rich purple that borders on dark magenta. This intense color suggests luxury and mystery, like royal velvet or exotic orchids.' },
-    { color: '#9932CC', description: 'A vibrant, dark purple like blooming orchid flowers. This exotic color combines blue and red in perfect balance, suggesting elegance and sophistication.' },
-    { color: '#E6E6FA', description: 'A very pale purple with a gentle, ethereal quality. This delicate color resembles the soft purple flowers of its namesake plant, bringing calm and serenity.' },
+    { color: '#9370DB', name: 'Medium Purple', description: 'A soft, muted purple with blue undertones, like mountain ranges at twilight. This dreamy color blends the calm of blue with the mystery of purple.' },
+    { color: '#8B008B', name: 'Dark Magenta', description: 'A deep, rich purple that borders on dark magenta. This intense color suggests luxury and mystery, like royal velvet or exotic orchids.' },
+    { color: '#9932CC', name: 'Dark Orchid', description: 'A vibrant, dark purple like blooming orchid flowers. This exotic color combines blue and red in perfect balance, suggesting elegance and sophistication.' },
+    { color: '#E6E6FA', name: 'Lavender', description: 'A very pale purple with a gentle, ethereal quality. This delicate color resembles the soft purple flowers of its namesake plant, bringing calm and serenity.' },
 
     // Oranges
-    { color: '#FF8C00', description: 'A deep, vivid orange without any red or yellow dominance. This pure orange resembles autumn leaves at their peak or fresh citrus fruit.' },
-    { color: '#FF7F50', description: 'A warm orange-pink like tropical marine formations. This vibrant color captures the beauty of underwater reefs and ocean life.' },
-    { color: '#FF6347', description: 'A bright red-orange like perfectly ripe garden vegetables. This appetizing color sits between red and orange, suggesting freshness and flavor.' },
+    { color: '#FF8C00', name: 'Dark Orange', description: 'A deep, vivid orange without any red or yellow dominance. This pure orange resembles autumn leaves at their peak or fresh citrus fruit.' },
+    { color: '#FF7F50', name: 'Coral', description: 'A warm orange-pink like tropical marine formations. This vibrant color captures the beauty of underwater reefs and ocean life.' },
+    { color: '#FFA500', name: 'Orange', description: 'A bright, pure orange that sits perfectly between red and yellow. This energetic color is associated with autumn, citrus fruits, and warmth.' },
 
     // Pinks
-    { color: '#FF69B4', description: 'A vivid, bright pink with blue undertones. This bold, tropical color is energetic and playful, like neon signs or vibrant flowers.' },
-    { color: '#FFC0CB', description: 'A very light, delicate pink like cherry blossoms or cotton candy. This soft, sweet color evokes innocence and gentle femininity.' },
-    { color: '#FFB6C1', description: 'A pale pink that\'s slightly more saturated than baby pink. This tender color suggests romance and softness, like rose petals or sunset clouds.' },
+    { color: '#FF69B4', name: 'Hot Pink', description: 'A vivid, bright pink with blue undertones. This bold, tropical color is energetic and playful, like neon signs or vibrant flowers.' },
+    { color: '#FFC0CB', name: 'Pink', description: 'A very light, delicate pink like cherry blossoms or cotton candy. This soft, sweet color evokes innocence and gentle femininity.' },
+    { color: '#FFB6C1', name: 'Light Pink', description: 'A pale pink that\'s slightly more saturated than baby pink. This tender color suggests romance and softness, like rose petals or sunset clouds.' },
 
     // Browns
-    { color: '#8B4513', description: 'A rich, reddish-brown like polished leather saddles. This warm, earthy color evokes craftsmanship and natural materials, suggesting autumn and harvest.' },
-    { color: '#D2691E', description: 'A medium brown with orange undertones, like roasted cacao beans or autumn spices. This warm color is both inviting and appetizing.' },
-    { color: '#A0522D', description: 'A reddish-brown like weathered clay or brick. This earthy color suggests natural materials and rustic charm.' },
+    { color: '#8B4513', name: 'Saddle Brown', description: 'A rich, reddish-brown like polished leather saddles. This warm, earthy color evokes craftsmanship and natural materials, suggesting autumn and harvest.' },
+    { color: '#D2691E', name: 'Chocolate', description: 'A medium brown with orange undertones, like roasted cacao beans or autumn spices. This warm color is both inviting and appetizing.' },
+    { color: '#A0522D', name: 'Sienna', description: 'A reddish-brown like weathered clay or brick. This earthy color suggests natural materials and rustic charm.' },
 
     // Grays
-    { color: '#708090', description: 'A medium gray with subtle blue undertones, like storm clouds or slate tiles. This cool, neutral color suggests stability and professionalism.' },
-    { color: '#C0C0C0', description: 'A light gray with a slight metallic quality, like polished metal or modern design elements. This neutral color is sleek and contemporary.' },
-    { color: '#696969', description: 'A medium-dark gray, perfectly neutral without warm or cool tones. This balanced color is versatile and sophisticated.' }
+    { color: '#708090', name: 'Slate Gray', description: 'A medium gray with subtle blue undertones, like storm clouds or slate tiles. This cool, neutral color suggests stability and professionalism.' },
+    { color: '#C0C0C0', name: 'Silver', description: 'A light gray with a slight metallic quality, like polished metal or modern design elements. This neutral color is sleek and contemporary.' },
+    { color: '#696969', name: 'Dim Gray', description: 'A medium-dark gray, perfectly neutral without warm or cool tones. This balanced color is versatile and sophisticated.' }
 ];
 
 // Initialize game
 function initGame() {
     loadBestStreak();
+    setupModeToggle();
     newRound();
 }
 
@@ -83,6 +86,16 @@ function saveBestStreak() {
         localStorage.setItem('colorGuesserBest', bestStreak);
         document.getElementById('best').textContent = bestStreak;
     }
+}
+
+// Setup mode toggle
+function setupModeToggle() {
+    const modeToggle = document.getElementById('modeToggle');
+    modeToggle.addEventListener('click', () => {
+        gameMode = gameMode === 'description' ? 'name' : 'description';
+        modeToggle.textContent = gameMode === 'description' ? 'Mode: Description' : 'Mode: Name';
+        newRound();
+    });
 }
 
 // Generate similar colors
@@ -133,18 +146,27 @@ function newRound() {
     const colors = generateSimilarColors(currentCorrectColor);
     const shuffledColors = shuffle(colors);
 
-    // Display description
-    document.getElementById('description').textContent = randomColorData.description;
+    // Store the correct index
+    currentCorrectIndex = shuffledColors.findIndex(c => c.toUpperCase() === currentCorrectColor.toUpperCase());
+
+    // Display description or name based on mode
+    const descriptionBox = document.getElementById('description');
+    if (gameMode === 'description') {
+        descriptionBox.textContent = randomColorData.description;
+    } else {
+        descriptionBox.textContent = randomColorData.name;
+    }
 
     // Display color boxes
     const container = document.getElementById('colorsContainer');
     container.innerHTML = '';
 
-    shuffledColors.forEach(color => {
+    shuffledColors.forEach((color, index) => {
         const box = document.createElement('div');
         box.className = 'color-box';
         box.style.backgroundColor = color;
-        box.addEventListener('click', () => checkAnswer(color, box));
+        box.dataset.index = index;
+        box.addEventListener('click', () => checkAnswer(color, box, index));
         container.appendChild(box);
     });
 
@@ -155,7 +177,7 @@ function newRound() {
 }
 
 // Check answer
-function checkAnswer(selectedColor, box) {
+function checkAnswer(selectedColor, box, selectedIndex) {
     if (hasAnswered) return;
 
     hasAnswered = true;
@@ -165,10 +187,15 @@ function checkAnswer(selectedColor, box) {
     // Disable all boxes
     allBoxes.forEach(b => b.classList.add('disabled'));
 
-    if (selectedColor.toUpperCase() === currentCorrectColor.toUpperCase()) {
+    const isCorrect = selectedIndex === currentCorrectIndex;
+
+    if (isCorrect) {
         // Correct answer
         box.classList.add('correct');
-        feedback.textContent = '✓ Correct! Well done!';
+
+        // Show color code
+        const colorName = colorData.find(c => c.color.toUpperCase() === currentCorrectColor.toUpperCase()).name;
+        feedback.innerHTML = `✓ Correct! <strong>${colorName}</strong> (${currentCorrectColor.toUpperCase()})`;
         feedback.className = 'feedback correct';
         score += 10;
         streak++;
@@ -178,13 +205,11 @@ function checkAnswer(selectedColor, box) {
         box.classList.add('incorrect');
 
         // Highlight correct answer
-        allBoxes.forEach(b => {
-            if (b.style.backgroundColor === rgbToHex(currentCorrectColor)) {
-                b.classList.add('correct');
-            }
-        });
+        allBoxes[currentCorrectIndex].classList.add('correct');
 
-        feedback.textContent = '✗ Wrong! The correct color was highlighted.';
+        // Show color codes
+        const colorName = colorData.find(c => c.color.toUpperCase() === currentCorrectColor.toUpperCase()).name;
+        feedback.innerHTML = `✗ Wrong! The correct answer was <strong>${colorName}</strong> (${currentCorrectColor.toUpperCase()})`;
         feedback.className = 'feedback incorrect';
         streak = 0;
     }
@@ -195,21 +220,6 @@ function checkAnswer(selectedColor, box) {
 
     // Show next button
     document.getElementById('nextButton').style.display = 'block';
-}
-
-// Convert RGB to Hex (for comparison)
-function rgbToHex(color) {
-    if (color.startsWith('#')) {
-        return color.toLowerCase();
-    }
-
-    const rgb = color.match(/\d+/g);
-    const hex = '#' +
-        parseInt(rgb[0]).toString(16).padStart(2, '0') +
-        parseInt(rgb[1]).toString(16).padStart(2, '0') +
-        parseInt(rgb[2]).toString(16).padStart(2, '0');
-
-    return hex.toLowerCase();
 }
 
 // Next button handler
