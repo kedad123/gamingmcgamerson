@@ -76,6 +76,10 @@ h1 {
     transform: translateY(0);
 }
 
+.learning-toggle {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
 .score-board {
     display: flex;
     justify-content: space-around;

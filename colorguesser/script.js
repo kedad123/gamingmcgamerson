@@ -7,6 +7,7 @@ let currentCorrectIndex = null;
 let hasAnswered = false;
 let gameMode = 'description'; // 'description' or 'name'
 let difficulty = 'medium'; // 'easy', 'medium', or 'hard'
+let learningMode = false; // when true, uses color wheel instead of full database
 
 // Color database with detailed descriptions and names
 const colorData = [
@@ -64,11 +65,43 @@ const colorData = [
     { color: '#696969', name: 'Dim Gray', description: 'A medium-dark gray, perfectly neutral without warm or cool tones. This balanced color is versatile and sophisticated.' }
 ];
 
+// Learning mode color wheel
+const colorWheel = {
+    primary: [
+        { color: '#FF0000', name: 'Red', description: 'A pure, vibrant red - one of the three primary colors. This fundamental color cannot be created by mixing other colors.' },
+        { color: '#FFFF00', name: 'Yellow', description: 'A pure, bright yellow - one of the three primary colors. This fundamental color stands alone and cannot be created by mixing.' },
+        { color: '#0000FF', name: 'Blue', description: 'A pure, vivid blue - one of the three primary colors. This fundamental color is irreducible and forms the basis of all other colors.' }
+    ],
+    secondary: [
+        { color: '#FF0000', name: 'Red', description: 'A pure, vibrant red - one of the three primary colors. This fundamental color cannot be created by mixing other colors.' },
+        { color: '#FF7F00', name: 'Orange', description: 'A bright orange created by mixing red and yellow. This secondary color bridges warm colors, bringing energy and enthusiasm.' },
+        { color: '#FFFF00', name: 'Yellow', description: 'A pure, bright yellow - one of the three primary colors. This fundamental color stands alone and cannot be created by mixing.' },
+        { color: '#00FF00', name: 'Green', description: 'A vibrant green created by mixing yellow and blue. This secondary color represents nature, growth, and harmony.' },
+        { color: '#0000FF', name: 'Blue', description: 'A pure, vivid blue - one of the three primary colors. This fundamental color is irreducible and forms the basis of all other colors.' },
+        { color: '#8B00FF', name: 'Purple', description: 'A rich purple created by mixing red and blue. This secondary color combines the passion of red with the calm of blue.' }
+    ],
+    tertiary: [
+        { color: '#FF0000', name: 'Red', description: 'A pure, vibrant red - one of the three primary colors on the color wheel.' },
+        { color: '#FF3F00', name: 'Vermilion', description: 'A red-orange tertiary color, leaning toward red. Created by mixing red with orange, it has a fiery, energetic quality.' },
+        { color: '#FF7F00', name: 'Orange', description: 'A bright orange secondary color, perfectly balanced between red and yellow on the color wheel.' },
+        { color: '#FFBF00', name: 'Amber', description: 'A yellow-orange tertiary color, leaning toward yellow. Created by mixing yellow with orange, it resembles golden honey.' },
+        { color: '#FFFF00', name: 'Yellow', description: 'A pure, bright yellow - one of the three primary colors on the color wheel.' },
+        { color: '#7FFF00', name: 'Lime', description: 'A yellow-green tertiary color, leaning toward green. Created by mixing yellow with green, it has a fresh, spring-like quality.' },
+        { color: '#00FF00', name: 'Green', description: 'A vibrant green secondary color, perfectly balanced between yellow and blue on the color wheel.' },
+        { color: '#00FF7F', name: 'Cyan', description: 'A blue-green tertiary color, also called aqua or turquoise. Created by mixing green with blue, it evokes tropical waters.' },
+        { color: '#0000FF', name: 'Blue', description: 'A pure, vivid blue - one of the three primary colors on the color wheel.' },
+        { color: '#7F00FF', name: 'Violet', description: 'A blue-purple tertiary color, leaning toward blue. Created by mixing blue with purple, it has a cool, royal quality.' },
+        { color: '#8B00FF', name: 'Purple', description: 'A rich purple secondary color, perfectly balanced between blue and red on the color wheel.' },
+        { color: '#FF00FF', name: 'Magenta', description: 'A red-purple tertiary color, leaning toward red. Created by mixing purple with red, it has a bold, vibrant quality.' }
+    ]
+};
+
 // Initialize game
 function initGame() {
     loadBestStreak();
     setupModeToggle();
     setupDifficultyToggle();
+    setupLearningModeToggle();
     newRound();
 }
 
@@ -112,10 +145,37 @@ function setupDifficultyToggle() {
             difficulty = 'easy';
         }
 
-        const difficultyText = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-        difficultyToggle.textContent = `Difficulty: ${difficultyText}`;
+        updateDifficultyText();
         newRound();
     });
+}
+
+// Setup learning mode toggle
+function setupLearningModeToggle() {
+    const learningToggle = document.getElementById('learningToggle');
+    learningToggle.addEventListener('click', () => {
+        learningMode = !learningMode;
+        learningToggle.textContent = learningMode ? 'Learning: ON' : 'Learning: OFF';
+        updateDifficultyText();
+        newRound();
+    });
+}
+
+// Update difficulty text based on learning mode
+function updateDifficultyText() {
+    const difficultyToggle = document.getElementById('difficultyToggle');
+    if (learningMode) {
+        if (difficulty === 'easy') {
+            difficultyToggle.textContent = 'Level: Primary (3)';
+        } else if (difficulty === 'medium') {
+            difficultyToggle.textContent = 'Level: Secondary (6)';
+        } else {
+            difficultyToggle.textContent = 'Level: Tertiary (12)';
+        }
+    } else {
+        const difficultyText = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+        difficultyToggle.textContent = `Difficulty: ${difficultyText}`;
+    }
 }
 
 // Generate similar colors based on difficulty
@@ -171,8 +231,22 @@ function shuffle(array) {
 function newRound() {
     hasAnswered = false;
 
-    // Pick random color from database
-    const randomColorData = colorData[Math.floor(Math.random() * colorData.length)];
+    // Pick random color from appropriate database
+    let randomColorData;
+    if (learningMode) {
+        // Use color wheel based on difficulty
+        let wheelColors;
+        if (difficulty === 'easy') {
+            wheelColors = colorWheel.primary;
+        } else if (difficulty === 'medium') {
+            wheelColors = colorWheel.secondary;
+        } else {
+            wheelColors = colorWheel.tertiary;
+        }
+        randomColorData = wheelColors[Math.floor(Math.random() * wheelColors.length)];
+    } else {
+        randomColorData = colorData[Math.floor(Math.random() * colorData.length)];
+    }
     currentCorrectColor = randomColorData.color;
 
     // Generate similar colors
