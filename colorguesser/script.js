@@ -233,6 +233,8 @@ function newRound() {
 
     // Pick random color from appropriate database
     let randomColorData;
+    let colors;
+
     if (learningMode) {
         // Use color wheel based on difficulty
         let wheelColors;
@@ -243,14 +245,27 @@ function newRound() {
         } else {
             wheelColors = colorWheel.tertiary;
         }
+
+        // Pick one correct answer
         randomColorData = wheelColors[Math.floor(Math.random() * wheelColors.length)];
+        currentCorrectColor = randomColorData.color;
+
+        // Pick 2 other random colors from the same wheel (making sure they're different)
+        const otherColors = wheelColors.filter(c => c.color !== currentCorrectColor);
+        const shuffledOthers = shuffle([...otherColors]);
+        colors = [
+            currentCorrectColor,
+            shuffledOthers[0].color,
+            shuffledOthers[1].color
+        ];
     } else {
         randomColorData = colorData[Math.floor(Math.random() * colorData.length)];
-    }
-    currentCorrectColor = randomColorData.color;
+        currentCorrectColor = randomColorData.color;
 
-    // Generate similar colors
-    const colors = generateSimilarColors(currentCorrectColor);
+        // Generate similar colors for normal mode
+        colors = generateSimilarColors(currentCorrectColor);
+    }
+
     const shuffledColors = shuffle(colors);
 
     // Store the correct index
