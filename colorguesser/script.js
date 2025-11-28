@@ -10,6 +10,7 @@ let difficulty = 'medium'; // 'easy', 'medium', or 'hard'
 let learningMode = false; // when true, uses color wheel instead of full database
 let shadesMode = false; // when true in learning mode, adds shades to the color wheel
 let currentWheelColors = null; // Store current wheel colors for learning mode
+let previousCorrectColor = null; // Track previous correct answer to avoid repeats
 
 // Color database with detailed descriptions and names
 const colorData = [
@@ -314,8 +315,12 @@ function newRound() {
 
         currentWheelColors = wheelColors; // Store for checkAnswer to use
 
-        // Pick one correct answer
-        randomColorData = wheelColors[Math.floor(Math.random() * wheelColors.length)];
+        // Pick one correct answer (make sure it's not the same as previous)
+        let availableColors = wheelColors;
+        if (previousCorrectColor) {
+            availableColors = wheelColors.filter(c => c.color !== previousCorrectColor);
+        }
+        randomColorData = availableColors[Math.floor(Math.random() * availableColors.length)];
         currentCorrectColor = randomColorData.color;
 
         // Pick 2 other random colors from the same wheel (making sure they're different)
@@ -328,12 +333,21 @@ function newRound() {
         ];
     } else {
         currentWheelColors = null; // Not in learning mode
-        randomColorData = colorData[Math.floor(Math.random() * colorData.length)];
+
+        // Pick one correct answer (make sure it's not the same as previous)
+        let availableColors = colorData;
+        if (previousCorrectColor) {
+            availableColors = colorData.filter(c => c.color !== previousCorrectColor);
+        }
+        randomColorData = availableColors[Math.floor(Math.random() * availableColors.length)];
         currentCorrectColor = randomColorData.color;
 
         // Generate similar colors for normal mode
         colors = generateSimilarColors(currentCorrectColor);
     }
+
+    // Store current color as previous for next round
+    previousCorrectColor = currentCorrectColor;
 
     const shuffledColors = shuffle(colors);
 
