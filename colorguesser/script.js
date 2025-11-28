@@ -8,6 +8,8 @@ let hasAnswered = false;
 let gameMode = 'description'; // 'description' or 'name'
 let difficulty = 'medium'; // 'easy', 'medium', or 'hard'
 let learningMode = false; // when true, uses color wheel instead of full database
+let shadesMode = false; // when true in learning mode, adds shades to the color wheel
+let currentWheelColors = null; // Store current wheel colors for learning mode
 
 // Color database with detailed descriptions and names
 const colorData = [
@@ -65,6 +67,35 @@ const colorData = [
     { color: '#696969', name: 'Dim Gray', description: 'A medium-dark gray, perfectly neutral without warm or cool tones. This balanced color is versatile and sophisticated.' }
 ];
 
+// Neutral shades
+const neutralShades = {
+    blackWhite: [
+        { color: '#000000', name: 'Black', description: 'The darkest color, the absence of light. Black represents depth, elegance, and mystery.' },
+        { color: '#FFFFFF', name: 'White', description: 'The lightest color, reflecting all wavelengths of light. White represents purity, cleanliness, and simplicity.' }
+    ],
+    grays: [
+        { color: '#808080', name: 'Gray', description: 'A neutral tone perfectly balanced between black and white. Gray represents neutrality and balance.' },
+        { color: '#404040', name: 'Dark Gray', description: 'A dark neutral tone closer to black. This shade represents sophistication and formality.' },
+        { color: '#C0C0C0', name: 'Light Gray', description: 'A light neutral tone closer to white. This shade represents subtlety and softness.' }
+    ]
+};
+
+// Color shades for tertiary level
+const colorShades = [
+    { color: '#8B0000', name: 'Dark Red', description: 'A deep, dark shade of red, like aged wine or burgundy.' },
+    { color: '#FF8080', name: 'Light Red', description: 'A soft, pale shade of red, like pink coral or salmon.' },
+    { color: '#808000', name: 'Dark Yellow (Olive)', description: 'A dark, muted shade of yellow with brown undertones.' },
+    { color: '#FFFF80', name: 'Light Yellow', description: 'A pale, soft shade of yellow like lemon cream.' },
+    { color: '#000080', name: 'Dark Blue (Navy)', description: 'A deep, dark shade of blue like the ocean at night.' },
+    { color: '#8080FF', name: 'Light Blue', description: 'A soft, pale shade of blue like a clear sky.' },
+    { color: '#804000', name: 'Dark Orange (Brown)', description: 'A dark, muted shade of orange with brown tones.' },
+    { color: '#FFC080', name: 'Light Orange (Peach)', description: 'A soft, pale shade of orange like ripe peaches.' },
+    { color: '#008000', name: 'Dark Green', description: 'A deep, dark shade of green like forest shadows.' },
+    { color: '#80FF80', name: 'Light Green', description: 'A soft, pale shade of green like spring leaves.' },
+    { color: '#400080', name: 'Dark Purple', description: 'A deep, dark shade of purple like royal velvet.' },
+    { color: '#C080FF', name: 'Light Purple (Lavender)', description: 'A soft, pale shade of purple like lavender flowers.' }
+];
+
 // Learning mode color wheel
 const colorWheel = {
     primary: [
@@ -88,7 +119,7 @@ const colorWheel = {
         { color: '#FFFF00', name: 'Yellow', description: 'A pure, bright yellow - one of the three primary colors on the color wheel.' },
         { color: '#7FFF00', name: 'Lime', description: 'A yellow-green tertiary color, leaning toward green. Created by mixing yellow with green, it has a fresh, spring-like quality.' },
         { color: '#00FF00', name: 'Green', description: 'A vibrant green secondary color, perfectly balanced between yellow and blue on the color wheel.' },
-        { color: '#00FF7F', name: 'Cyan', description: 'A blue-green tertiary color, also called aqua or turquoise. Created by mixing green with blue, it evokes tropical waters.' },
+        { color: '#00FFFF', name: 'Cyan', description: 'A blue-green tertiary color, also called aqua or turquoise. Created by mixing green with blue, it evokes tropical waters.' },
         { color: '#0000FF', name: 'Blue', description: 'A pure, vivid blue - one of the three primary colors on the color wheel.' },
         { color: '#7F00FF', name: 'Violet', description: 'A blue-purple tertiary color, leaning toward blue. Created by mixing blue with purple, it has a cool, royal quality.' },
         { color: '#8B00FF', name: 'Purple', description: 'A rich purple secondary color, perfectly balanced between blue and red on the color wheel.' },
@@ -102,6 +133,7 @@ function initGame() {
     setupModeToggle();
     setupDifficultyToggle();
     setupLearningModeToggle();
+    setupShadesToggle();
     newRound();
 }
 
@@ -153,10 +185,32 @@ function setupDifficultyToggle() {
 // Setup learning mode toggle
 function setupLearningModeToggle() {
     const learningToggle = document.getElementById('learningToggle');
+    const shadesToggle = document.getElementById('shadesToggle');
+
     learningToggle.addEventListener('click', () => {
         learningMode = !learningMode;
         learningToggle.textContent = learningMode ? 'Learning: ON' : 'Learning: OFF';
+
+        // Show/hide shades toggle based on learning mode
+        if (learningMode) {
+            shadesToggle.style.display = 'inline-block';
+        } else {
+            shadesToggle.style.display = 'none';
+            shadesMode = false;
+            shadesToggle.textContent = 'Shades: OFF';
+        }
+
         updateDifficultyText();
+        newRound();
+    });
+}
+
+// Setup shades toggle
+function setupShadesToggle() {
+    const shadesToggle = document.getElementById('shadesToggle');
+    shadesToggle.addEventListener('click', () => {
+        shadesMode = !shadesMode;
+        shadesToggle.textContent = shadesMode ? 'Shades: ON' : 'Shades: OFF';
         newRound();
     });
 }
@@ -239,12 +293,26 @@ function newRound() {
         // Use color wheel based on difficulty
         let wheelColors;
         if (difficulty === 'easy') {
-            wheelColors = colorWheel.primary;
+            wheelColors = [...colorWheel.primary];
+            // Add black and white in shades mode
+            if (shadesMode) {
+                wheelColors = [...wheelColors, ...neutralShades.blackWhite];
+            }
         } else if (difficulty === 'medium') {
-            wheelColors = colorWheel.secondary;
+            wheelColors = [...colorWheel.secondary];
+            // Add black, white, and gray in shades mode
+            if (shadesMode) {
+                wheelColors = [...wheelColors, ...neutralShades.blackWhite, neutralShades.grays[0]];
+            }
         } else {
-            wheelColors = colorWheel.tertiary;
+            wheelColors = [...colorWheel.tertiary];
+            // Add black, white, all grays, and color shades in shades mode
+            if (shadesMode) {
+                wheelColors = [...wheelColors, ...neutralShades.blackWhite, ...neutralShades.grays, ...colorShades];
+            }
         }
+
+        currentWheelColors = wheelColors; // Store for checkAnswer to use
 
         // Pick one correct answer
         randomColorData = wheelColors[Math.floor(Math.random() * wheelColors.length)];
@@ -259,6 +327,7 @@ function newRound() {
             shuffledOthers[1].color
         ];
     } else {
+        currentWheelColors = null; // Not in learning mode
         randomColorData = colorData[Math.floor(Math.random() * colorData.length)];
         currentCorrectColor = randomColorData.color;
 
@@ -316,7 +385,8 @@ function checkAnswer(selectedColor, box, selectedIndex) {
         box.classList.add('correct');
 
         // Show color code
-        const colorName = colorData.find(c => c.color.toUpperCase() === currentCorrectColor.toUpperCase()).name;
+        const dataSource = currentWheelColors || colorData;
+        const colorName = dataSource.find(c => c.color.toUpperCase() === currentCorrectColor.toUpperCase()).name;
         feedback.innerHTML = `✓ Correct! <strong>${colorName}</strong> (${currentCorrectColor.toUpperCase()})`;
         feedback.className = 'feedback correct';
         score += 10;
@@ -330,7 +400,8 @@ function checkAnswer(selectedColor, box, selectedIndex) {
         allBoxes[currentCorrectIndex].classList.add('correct');
 
         // Show color codes
-        const colorName = colorData.find(c => c.color.toUpperCase() === currentCorrectColor.toUpperCase()).name;
+        const dataSource = currentWheelColors || colorData;
+        const colorName = dataSource.find(c => c.color.toUpperCase() === currentCorrectColor.toUpperCase()).name;
         feedback.innerHTML = `✗ Wrong! The correct answer was <strong>${colorName}</strong> (${currentCorrectColor.toUpperCase()})`;
         feedback.className = 'feedback incorrect';
         streak = 0;
