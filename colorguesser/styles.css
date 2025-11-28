@@ -47,8 +47,11 @@ h1 {
 }
 
 .mode-toggle-container {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .mode-toggle {

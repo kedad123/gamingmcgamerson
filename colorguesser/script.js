@@ -6,6 +6,7 @@ let currentCorrectColor = null;
 let currentCorrectIndex = null;
 let hasAnswered = false;
 let gameMode = 'description'; // 'description' or 'name'
+let difficulty = 'medium'; // 'easy', 'medium', or 'hard'
 
 // Color database with detailed descriptions and names
 const colorData = [
@@ -67,6 +68,7 @@ const colorData = [
 function initGame() {
     loadBestStreak();
     setupModeToggle();
+    setupDifficultyToggle();
     newRound();
 }
 
@@ -98,7 +100,25 @@ function setupModeToggle() {
     });
 }
 
-// Generate similar colors
+// Setup difficulty toggle
+function setupDifficultyToggle() {
+    const difficultyToggle = document.getElementById('difficultyToggle');
+    difficultyToggle.addEventListener('click', () => {
+        if (difficulty === 'easy') {
+            difficulty = 'medium';
+        } else if (difficulty === 'medium') {
+            difficulty = 'hard';
+        } else {
+            difficulty = 'easy';
+        }
+
+        const difficultyText = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+        difficultyToggle.textContent = `Difficulty: ${difficultyText}`;
+        newRound();
+    });
+}
+
+// Generate similar colors based on difficulty
 function generateSimilarColors(baseColor) {
     const colors = [baseColor];
 
@@ -107,9 +127,22 @@ function generateSimilarColors(baseColor) {
     const g = parseInt(baseColor.slice(3, 5), 16);
     const b = parseInt(baseColor.slice(5, 7), 16);
 
-    // Generate two similar colors with slight variations
+    // Set variation range based on difficulty
+    let minVariation, maxVariation;
+    if (difficulty === 'easy') {
+        minVariation = 50;
+        maxVariation = 90;
+    } else if (difficulty === 'medium') {
+        minVariation = 30;
+        maxVariation = 60;
+    } else { // hard
+        minVariation = 10;
+        maxVariation = 30;
+    }
+
+    // Generate two similar colors with variations based on difficulty
     for (let i = 0; i < 2; i++) {
-        const variation = 30 + Math.random() * 40; // Random variation between 30-70
+        const variation = minVariation + Math.random() * (maxVariation - minVariation);
         const newR = Math.max(0, Math.min(255, r + (Math.random() > 0.5 ? variation : -variation)));
         const newG = Math.max(0, Math.min(255, g + (Math.random() > 0.5 ? variation : -variation)));
         const newB = Math.max(0, Math.min(255, b + (Math.random() > 0.5 ? variation : -variation)));
