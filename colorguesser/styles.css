@@ -129,6 +129,10 @@ h1 {
     margin-bottom: 30px;
 }
 
+.colors-container.five-choices {
+    grid-template-columns: repeat(5, 1fr);
+}
+
 .color-box {
     aspect-ratio: 1;
     border-radius: 15px;

@@ -7,6 +7,7 @@ let currentCorrectIndex = null;
 let hasAnswered = false;
 let gameMode = 'description'; // 'description' or 'name'
 let difficulty = 'medium'; // 'easy', 'medium', or 'hard'
+let numChoices = 3; // 3 or 5
 let learningMode = false; // when true, uses color wheel instead of full database
 let shadesMode = false; // when true in learning mode, adds shades to the color wheel
 let currentWheelColors = null; // Store current wheel colors for learning mode
@@ -133,6 +134,7 @@ function initGame() {
     loadBestStreak();
     setupModeToggle();
     setupDifficultyToggle();
+    setupChoicesToggle();
     setupLearningModeToggle();
     setupShadesToggle();
     newRound();
@@ -179,6 +181,16 @@ function setupDifficultyToggle() {
         }
 
         updateDifficultyText();
+        newRound();
+    });
+}
+
+// Setup choices toggle
+function setupChoicesToggle() {
+    const choicesToggle = document.getElementById('choicesToggle');
+    choicesToggle.addEventListener('click', () => {
+        numChoices = numChoices === 3 ? 5 : 3;
+        choicesToggle.textContent = `Choices: ${numChoices}`;
         newRound();
     });
 }
@@ -234,7 +246,7 @@ function updateDifficultyText() {
 }
 
 // Generate similar colors based on difficulty
-function generateSimilarColors(baseColor) {
+function generateSimilarColors(baseColor, count = 3) {
     const colors = [baseColor];
 
     // Parse base color
@@ -255,8 +267,8 @@ function generateSimilarColors(baseColor) {
         maxVariation = 30;
     }
 
-    // Generate two similar colors with variations based on difficulty
-    for (let i = 0; i < 2; i++) {
+    // Generate similar colors with variations based on difficulty
+    for (let i = 0; i < count - 1; i++) {
         const variation = minVariation + Math.random() * (maxVariation - minVariation);
         const newR = Math.max(0, Math.min(255, r + (Math.random() > 0.5 ? variation : -variation)));
         const newG = Math.max(0, Math.min(255, g + (Math.random() > 0.5 ? variation : -variation)));
@@ -323,14 +335,13 @@ function newRound() {
         randomColorData = availableColors[Math.floor(Math.random() * availableColors.length)];
         currentCorrectColor = randomColorData.color;
 
-        // Pick 2 other random colors from the same wheel (making sure they're different)
+        // Pick other random colors from the same wheel (making sure they're different)
         const otherColors = wheelColors.filter(c => c.color !== currentCorrectColor);
         const shuffledOthers = shuffle([...otherColors]);
-        colors = [
-            currentCorrectColor,
-            shuffledOthers[0].color,
-            shuffledOthers[1].color
-        ];
+        colors = [currentCorrectColor];
+        for (let i = 0; i < numChoices - 1; i++) {
+            colors.push(shuffledOthers[i].color);
+        }
     } else {
         currentWheelColors = null; // Not in learning mode
 
@@ -343,7 +354,7 @@ function newRound() {
         currentCorrectColor = randomColorData.color;
 
         // Generate similar colors for normal mode
-        colors = generateSimilarColors(currentCorrectColor);
+        colors = generateSimilarColors(currentCorrectColor, numChoices);
     }
 
     // Store current color as previous for next round
@@ -365,6 +376,13 @@ function newRound() {
     // Display color boxes
     const container = document.getElementById('colorsContainer');
     container.innerHTML = '';
+
+    // Update grid layout based on number of choices
+    if (numChoices === 5) {
+        container.classList.add('five-choices');
+    } else {
+        container.classList.remove('five-choices');
+    }
 
     shuffledColors.forEach((color, index) => {
         const box = document.createElement('div');
