@@ -16,6 +16,7 @@ interface Ball {
   swordAngle?: number; // Current angle of the sword rotation
   rainbowTint?: string; // For rainbow balls that have absorbed colors
   tintStrength?: number; // How strong the tint is (0-1)
+  trail?: { x: number; y: number }[]; // Trail history for visual effects
 }
 
 interface SimulationCanvasProps {
@@ -40,6 +41,8 @@ interface SimulationCanvasProps {
   rpsMode: boolean;
   resetTrigger: number;
   isPaused: boolean;
+  trailsEnabled: boolean;
+  trailOpacity: number;
 }
 
 export const SimulationCanvas = ({
@@ -64,6 +67,8 @@ export const SimulationCanvas = ({
   rpsMode,
   resetTrigger,
   isPaused,
+  trailsEnabled,
+  trailOpacity,
 }: SimulationCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ballsRef = useRef<Ball[]>([]);
@@ -179,6 +184,53 @@ export const SimulationCanvas = ({
     lavaHeightRef.current = 0;
     containerSizeRef.current = 1;
     containerSidesRef.current = 3;
+  };
+
+  const drawTrails = (ctx: CanvasRenderingContext2D, ball: Ball) => {
+    if (!ball.trail || ball.trail.length < 2) return;
+
+    ctx.save();
+
+    // Parse the ball's color to get RGB values
+    let r = 255, g = 255, b = 255;
+    if (ball.color !== "rainbow") {
+      // Convert hex to RGB
+      const hex = ball.color.replace('#', '');
+      r = parseInt(hex.substring(0, 2), 16);
+      g = parseInt(hex.substring(2, 4), 16);
+      b = parseInt(hex.substring(4, 6), 16);
+    }
+
+    // Draw trail as connected lines with fading opacity
+    for (let i = 0; i < ball.trail.length - 1; i++) {
+      const point = ball.trail[i];
+      const nextPoint = ball.trail[i + 1];
+
+      // Calculate opacity based on position in trail (older = more transparent)
+      const trailProgress = i / ball.trail.length;
+      const opacity = trailOpacity * trailProgress;
+
+      ctx.beginPath();
+      ctx.moveTo(point.x, point.y);
+      ctx.lineTo(nextPoint.x, nextPoint.y);
+
+      if (ball.color === "rainbow") {
+        // For rainbow balls, use a rainbow gradient
+        const gradient = ctx.createLinearGradient(point.x, point.y, nextPoint.x, nextPoint.y);
+        gradient.addColorStop(0, `rgba(255, 0, 0, ${opacity})`);
+        gradient.addColorStop(0.5, `rgba(0, 255, 0, ${opacity})`);
+        gradient.addColorStop(1, `rgba(0, 0, 255, ${opacity})`);
+        ctx.strokeStyle = gradient;
+      } else {
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+      }
+
+      ctx.lineWidth = ball.radius * 0.5; // Trail width proportional to ball size
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    ctx.restore();
   };
 
   const drawBall = (ctx: CanvasRenderingContext2D, ball: Ball) => {
@@ -781,6 +833,21 @@ export const SimulationCanvas = ({
         ball.x += ball.vx;
         ball.y += ball.vy;
 
+        // Record trail position if trails are enabled
+        if (trailsEnabled) {
+          if (!ball.trail) {
+            ball.trail = [];
+          }
+          ball.trail.push({ x: ball.x, y: ball.y });
+          // Limit trail length to 50 points for performance
+          if (ball.trail.length > 50) {
+            ball.trail.shift();
+          }
+        } else if (ball.trail) {
+          // Clear trail if trails are disabled
+          ball.trail = [];
+        }
+
         // Check if ball touches lava
         if (lavaRise && ball.y + ball.radius >= canvas.height - lavaHeightRef.current) {
           // Play pop sound when ball disappears
@@ -1170,6 +1237,13 @@ export const SimulationCanvas = ({
         ctx.fillRect(0, canvas.height - lavaHeightRef.current, canvas.width, lavaHeightRef.current);
       }
 
+      // Draw trails (before balls so they appear behind)
+      if (trailsEnabled) {
+        ballsRef.current.forEach((ball) => {
+          drawTrails(ctx, ball);
+        });
+      }
+
       // Draw balls
       ballsRef.current.forEach((ball) => {
         drawBall(ctx, ball);
@@ -1186,7 +1260,7 @@ export const SimulationCanvas = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [gravity, elasticity, containerShape, collisionEnabled, growOnBounce, lavaRise, containerShrink, addSidesOnBounce, containerAddSidesOnBounce, addBallOnBounce, ballSize, ballShape, ballColors, blackHoleMode, isPaused]);
+  }, [gravity, elasticity, containerShape, collisionEnabled, growOnBounce, lavaRise, containerShrink, addSidesOnBounce, containerAddSidesOnBounce, addBallOnBounce, ballSize, ballShape, ballColors, blackHoleMode, isPaused, trailsEnabled, trailOpacity]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

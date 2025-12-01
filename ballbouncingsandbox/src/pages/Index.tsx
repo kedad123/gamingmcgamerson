@@ -29,6 +29,8 @@ const Index = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [soundsOn, setSoundsOn] = useState(true);
   const [musicOn, setMusicOn] = useState(false);
+  const [trailsEnabled, setTrailsEnabled] = useState(false);
+  const [trailOpacity, setTrailOpacity] = useState(0.5);
 
   const handleReset = () => {
     setResetTrigger((prev) => prev + 1);
@@ -110,6 +112,8 @@ const Index = () => {
             rpsMode={rpsMode}
             resetTrigger={resetTrigger}
             isPaused={isPaused}
+            trailsEnabled={trailsEnabled}
+            trailOpacity={trailOpacity}
             />
           </div>
 
@@ -159,6 +163,10 @@ const Index = () => {
             setSoundsOn={setSoundsOn}
             musicOn={musicOn}
             setMusicOn={setMusicOn}
+            trailsEnabled={trailsEnabled}
+            setTrailsEnabled={setTrailsEnabled}
+            trailOpacity={trailOpacity}
+            setTrailOpacity={setTrailOpacity}
             onReset={handleReset}
             isPaused={isPaused}
             onTogglePause={handleTogglePause}

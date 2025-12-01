@@ -51,6 +51,10 @@ interface ControlPanelProps {
   setSoundsOn: (value: boolean) => void;
   musicOn: boolean;
   setMusicOn: (value: boolean) => void;
+  trailsEnabled: boolean;
+  setTrailsEnabled: (value: boolean) => void;
+  trailOpacity: number;
+  setTrailOpacity: (value: number) => void;
   onReset: () => void;
   isPaused: boolean;
   onTogglePause: () => void;
@@ -101,6 +105,10 @@ export const ControlPanel = ({
   setSoundsOn,
   musicOn,
   setMusicOn,
+  trailsEnabled,
+  setTrailsEnabled,
+  trailOpacity,
+  setTrailOpacity,
   onReset,
   isPaused,
   onTogglePause,
@@ -442,6 +450,37 @@ export const ControlPanel = ({
             onCheckedChange={setShowStats}
           />
         </div>
+
+        <div className="flex items-center justify-between space-x-2">
+          <Label htmlFor="trailsEnabled" className="text-sm font-medium">
+            Ball Trails
+          </Label>
+          <Switch
+            id="trailsEnabled"
+            checked={trailsEnabled}
+            onCheckedChange={setTrailsEnabled}
+          />
+        </div>
+
+        {trailsEnabled && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="trailOpacity" className="text-sm font-medium">
+                Trail Opacity
+              </Label>
+              <span className="text-sm text-muted-foreground">{(trailOpacity * 100).toFixed(0)}%</span>
+            </div>
+            <Slider
+              id="trailOpacity"
+              min={0.1}
+              max={1}
+              step={0.1}
+              value={[trailOpacity]}
+              onValueChange={(value) => setTrailOpacity(value[0])}
+              className="transition-smooth"
+            />
+          </div>
+        )}
       </div>
 
       <div className="pt-4 border-t border-border">
