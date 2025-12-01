@@ -187,7 +187,7 @@ export const SimulationCanvas = ({
   };
 
   const drawTrails = (ctx: CanvasRenderingContext2D, ball: Ball) => {
-    if (!ball.trail || ball.trail.length < 2) return;
+    if (!ball.trail || ball.trail.length < 1) return;
 
     ctx.save();
 
@@ -201,34 +201,25 @@ export const SimulationCanvas = ({
       b = parseInt(hex.substring(4, 6), 16);
     }
 
-    // Draw trail as connected lines with fading opacity
-    for (let i = 0; i < ball.trail.length - 1; i++) {
-      const point = ball.trail[i];
-      const nextPoint = ball.trail[i + 1];
-
-      // Calculate opacity based on position in trail (older = more transparent)
-      const trailProgress = i / ball.trail.length;
-      const opacity = trailOpacity * trailProgress;
-
+    // Draw permanent circles at each trail point (same size as ball)
+    ball.trail.forEach((point, i) => {
       ctx.beginPath();
-      ctx.moveTo(point.x, point.y);
-      ctx.lineTo(nextPoint.x, nextPoint.y);
+      ctx.arc(point.x, point.y, ball.radius, 0, Math.PI * 2);
 
       if (ball.color === "rainbow") {
-        // For rainbow balls, use a rainbow gradient
-        const gradient = ctx.createLinearGradient(point.x, point.y, nextPoint.x, nextPoint.y);
-        gradient.addColorStop(0, `rgba(255, 0, 0, ${opacity})`);
-        gradient.addColorStop(0.5, `rgba(0, 255, 0, ${opacity})`);
-        gradient.addColorStop(1, `rgba(0, 0, 255, ${opacity})`);
-        ctx.strokeStyle = gradient;
+        // For rainbow balls, create a radial gradient
+        const gradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, ball.radius);
+        gradient.addColorStop(0, `rgba(255, 0, 0, ${trailOpacity})`);
+        gradient.addColorStop(0.33, `rgba(0, 255, 0, ${trailOpacity})`);
+        gradient.addColorStop(0.66, `rgba(0, 0, 255, ${trailOpacity})`);
+        gradient.addColorStop(1, `rgba(255, 0, 255, ${trailOpacity})`);
+        ctx.fillStyle = gradient;
       } else {
-        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${trailOpacity})`;
       }
 
-      ctx.lineWidth = ball.radius * 0.5; // Trail width proportional to ball size
-      ctx.lineCap = 'round';
-      ctx.stroke();
-    }
+      ctx.fill();
+    });
 
     ctx.restore();
   };
@@ -805,8 +796,15 @@ export const SimulationCanvas = ({
     window.addEventListener("resize", resizeCanvas);
 
     const animate = () => {
-      ctx.fillStyle = "rgba(17, 24, 39, 0.3)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // When trails are enabled, fully clear canvas (we redraw all trail points each frame)
+      // When trails are disabled, use semi-transparent clear to create motion blur
+      if (trailsEnabled) {
+        ctx.fillStyle = "rgb(17, 24, 39)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      } else {
+        ctx.fillStyle = "rgba(17, 24, 39, 0.3)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
 
       // Skip physics updates if paused, but keep drawing
       if (!isPaused) {
@@ -839,8 +837,8 @@ export const SimulationCanvas = ({
             ball.trail = [];
           }
           ball.trail.push({ x: ball.x, y: ball.y });
-          // Limit trail length to 50 points for performance
-          if (ball.trail.length > 50) {
+          // For permanent trails, keep all points (limit to 5000 for memory safety)
+          if (ball.trail.length > 5000) {
             ball.trail.shift();
           }
         } else if (ball.trail) {
