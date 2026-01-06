@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Whimsical Collectible Game Design System - Cozy Fantasy Theme */
+
+@layer base {
+  :root {
+    /* Base game colors - warm and cozy */
+    --background: 28 100% 97%;
+    --foreground: 25 20% 15%;
+    
+    /* Game UI */
+    --card: 30 50% 98%;
+    --card-foreground: 25 20% 15%;
+    --popover: 30 50% 98%;
+    --popover-foreground: 25 20% 15%;
+    
+    --primary: 25 95% 53%;
+    --primary-foreground: 30 50% 98%;
+    
+    --secondary: 35 30% 85%;
+    --secondary-foreground: 25 20% 15%;
+    
+    --muted: 35 20% 92%;
+    --muted-foreground: 25 15% 45%;
+    
+    --accent: 45 85% 65%;
+    --accent-foreground: 25 20% 15%;
+    
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 30 50% 98%;
+    
+    --border: 35 25% 88%;
+    --input: 35 25% 88%;
+    --ring: 25 95% 53%;
+    --radius: 1rem;
+
+    /* Rarity Tier Color System */
+    /* Common - Wood & Earth */
+    --common: 35 40% 55%;
+    --common-accent: 85 35% 45%;
+    --common-glow: 35 40% 75%;
+    
+    /* Uncommon - Soft Metals & Moss */
+    --uncommon: 75 25% 50%;
+    --uncommon-accent: 25 45% 65%;
+    --uncommon-glow: 75 25% 70%;
+    
+    /* Rare - Gems & Magic */
+    --rare: 245 85% 65%;
+    --rare-accent: 265 75% 75%;
+    --rare-glow: 245 85% 85%;
+    
+    /* Epic - Crystal Power */
+    --epic: 285 90% 70%;
+    --epic-accent: 305 85% 80%;
+    --epic-glow: 285 90% 88%;
+    
+    /* Really Rare - Unique Mystique */
+    --really-rare: 15 85% 65%;
+    --really-rare-accent: 35 90% 75%;
+    --really-rare-glow: 15 85% 85%;
+    
+    /* Super Rare - Ethereal Radiance */
+    --super-rare: 195 95% 75%;
+    --super-rare-accent: 175 90% 85%;
+    --super-rare-glow: 195 95% 90%;
+    
+    /* Legendary - Ancient Power */
+    --legendary: 45 95% 55%;
+    --legendary-accent: 25 85% 45%;
+    --legendary-glow: 45 95% 75%;
+    
+    /* Mythical - Celestial Wonder */
+    --mythical: 265 85% 80%;
+    --mythical-accent: 285 90% 90%;
+    --mythical-glow: 265 85% 95%;
+    
+    /* Magical - Iridescent Dreams */
+    --magical: 325 95% 75%;
+    --magical-accent: 345 85% 85%;
+    --magical-glow: 325 95% 90%;
+    
+    /* Ethereal - Transcendent Beauty */
+    --ethereal: 200 100% 85%;
+    --ethereal-accent: 220 95% 92%;
+    --ethereal-glow: 200 100% 95%;
+    
+    /* Diamond - Ultimate Perfection */
+    --diamond: 0 0% 95%;
+    --diamond-accent: 220 30% 85%;
+    --diamond-glow: 200 50% 98%;
+
+    /* Magical Effects */
+    --sparkle: 55 100% 85%;
+    --clover-glow: 120 60% 70%;
+    
+    /* Gradients for rarity backgrounds */
+    --gradient-common: linear-gradient(135deg, hsl(var(--common)) 0%, hsl(var(--common-accent)) 100%);
+    --gradient-uncommon: linear-gradient(135deg, hsl(var(--uncommon)) 0%, hsl(var(--uncommon-accent)) 100%);
+    --gradient-rare: linear-gradient(135deg, hsl(var(--rare)) 0%, hsl(var(--rare-accent)) 100%);
+    --gradient-epic: linear-gradient(135deg, hsl(var(--epic)) 0%, hsl(var(--epic-accent)) 100%);
+    --gradient-really-rare: linear-gradient(135deg, hsl(var(--really-rare)) 0%, hsl(var(--really-rare-accent)) 100%);
+    --gradient-super-rare: linear-gradient(135deg, hsl(var(--super-rare)) 0%, hsl(var(--super-rare-accent)) 100%);
+    --gradient-legendary: linear-gradient(135deg, hsl(var(--legendary)) 0%, hsl(var(--legendary-accent)) 100%);
+    --gradient-mythical: linear-gradient(135deg, hsl(var(--mythical)) 0%, hsl(var(--mythical-accent)) 100%);
+    --gradient-magical: linear-gradient(135deg, hsl(var(--magical)) 0%, hsl(var(--magical-accent)) 100%);
+    --gradient-ethereal: linear-gradient(135deg, hsl(var(--ethereal)) 0%, hsl(var(--ethereal-accent)) 100%);
+    --gradient-diamond: linear-gradient(135deg, hsl(var(--diamond)) 0%, hsl(var(--diamond-accent)) 100%);
+    
+    /* Magical animations */
+    --transition-magical: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-sparkle: all 0.3s ease-out;
+    
+    /* Shadows for depth */
+    --shadow-soft: 0 4px 20px hsl(var(--foreground) / 0.1);
+    --shadow-magical: 0 8px 30px hsl(var(--accent) / 0.3);
+    --shadow-rare: 0 12px 40px hsl(var(--rare) / 0.4);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
