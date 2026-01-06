@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 45 30% 96%;
+    --foreground: 220 20% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 20%;
+
+    --primary: 340 75% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 70% 60%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 45 20% 90%;
+    --muted-foreground: 220 10% 50%;
+
+    --accent: 140 60% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 45 20% 85%;
+    --input: 45 20% 85%;
+    --ring: 340 75% 55%;
+
+    --radius: 1rem;
+
+    /* Custom game colors */
+    --cube-red: 0 80% 65%;
+    --cube-orange: 30 90% 60%;
+    --cube-yellow: 45 95% 60%;
+    --cube-green: 140 70% 50%;
+    --cube-blue: 200 80% 55%;
+    --cube-purple: 280 70% 60%;
+    --cube-pink: 320 80% 65%;
+    --cube-teal: 170 70% 45%;
+
+    /* Connection line */
+    --connection: 220 20% 30%;
+    
+    /* Shadows */
+    --shadow-soft: 0 8px 30px -10px hsl(220 20% 20% / 0.15);
+    --shadow-cube: 0 12px 40px -15px hsl(220 20% 20% / 0.25);
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.3);
+  }
+
+  .dark {
+    --background: 220 25% 12%;
+    --foreground: 45 30% 96%;
+
+    --card: 220 25% 16%;
+    --card-foreground: 45 30% 96%;
+
+    --popover: 220 25% 16%;
+    --popover-foreground: 45 30% 96%;
+
+    --primary: 340 75% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 70% 55%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 20% 22%;
+    --muted-foreground: 45 20% 60%;
+
+    --accent: 140 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 20% 25%;
+    --input: 220 20% 25%;
+    --ring: 340 75% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-fredoka;
+  }
+}
+
+@layer utilities {
+  .font-fredoka {
+    font-family: 'Fredoka', sans-serif;
+  }
+}
+
+/* Animations */
+@keyframes bounce-in {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes walk {
+  0%, 100% { transform: translateX(0) scaleX(1); }
+  25% { transform: translateX(2px) scaleX(0.95); }
+  75% { transform: translateX(-2px) scaleX(0.95); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4); }
+  50% { box-shadow: 0 0 20px 5px hsl(var(--primary) / 0.2); }
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.03); }
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+@keyframes jump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes arm-wave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-20deg); }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-wiggle {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-walk {
+  animation: walk 0.3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-breathe {
+  animation: breathe 2s ease-in-out infinite;
+}
+
+.animate-wave {
+  animation: wave 0.8s ease-in-out infinite;
+}
+
+.animate-jump {
+  animation: jump 0.6s ease-in-out infinite;
+}
+
+.animate-arm-wave {
+  animation: arm-wave 0.4s ease-in-out infinite;
+}
+
+.animate-dash {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 0.8s ease-out forwards;
+}
