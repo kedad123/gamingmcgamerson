@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 45 30% 96%;
+    --foreground: 25 30% 15%;
+
+    --card: 45 40% 98%;
+    --card-foreground: 25 30% 15%;
+
+    --popover: 45 40% 98%;
+    --popover-foreground: 25 30% 15%;
+
+    --primary: 15 85% 60%;
+    --primary-foreground: 45 30% 98%;
+
+    --secondary: 175 50% 45%;
+    --secondary-foreground: 45 30% 98%;
+
+    --muted: 45 20% 90%;
+    --muted-foreground: 25 15% 45%;
+
+    --accent: 280 60% 65%;
+    --accent-foreground: 45 30% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 25 20% 85%;
+    --input: 25 20% 85%;
+    --ring: 15 85% 60%;
+
+    --radius: 1rem;
+
+    /* Custom tokens */
+    --gradient-playful: linear-gradient(135deg, hsl(15 85% 60%), hsl(35 90% 55%));
+    --gradient-cool: linear-gradient(135deg, hsl(175 50% 45%), hsl(195 60% 50%));
+    --gradient-magic: linear-gradient(135deg, hsl(280 60% 65%), hsl(320 70% 60%));
+    --shadow-soft: 0 4px 20px -5px hsl(25 30% 15% / 0.15);
+    --shadow-glow: 0 0 30px hsl(15 85% 60% / 0.3);
+  }
+
+  .dark {
+    --background: 25 30% 10%;
+    --foreground: 45 30% 96%;
+
+    --card: 25 25% 15%;
+    --card-foreground: 45 30% 96%;
+
+    --popover: 25 25% 15%;
+    --popover-foreground: 45 30% 96%;
+
+    --primary: 15 85% 60%;
+    --primary-foreground: 25 30% 10%;
+
+    --secondary: 175 50% 45%;
+    --secondary-foreground: 25 30% 10%;
+
+    --muted: 25 20% 20%;
+    --muted-foreground: 45 20% 65%;
+
+    --accent: 280 60% 65%;
+    --accent-foreground: 25 30% 10%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 25 20% 25%;
+    --input: 25 20% 25%;
+    --ring: 15 85% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .gradient-playful {
+    background: var(--gradient-playful);
+  }
+  
+  .gradient-cool {
+    background: var(--gradient-cool);
+  }
+  
+  .gradient-magic {
+    background: var(--gradient-magic);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(15 85% 60% / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(15 85% 60% / 0.5);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-wiggle {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
