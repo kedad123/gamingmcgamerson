@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 38 92% 50%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 215 25% 20%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 25% 15%;
+    --muted-foreground: 215 20% 55%;
+
+    --accent: 200 80% 55%;
+    --accent-foreground: 222 47% 6%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 25% 18%;
+    --input: 215 25% 18%;
+    --ring: 38 92% 50%;
+
+    --radius: 1rem;
+
+    /* Custom tokens */
+    --coin: 38 92% 50%;
+    --coin-glow: 38 92% 60%;
+    --operation: 200 60% 45%;
+    --operation-hover: 200 70% 55%;
+    --display-bg: 222 47% 4%;
+    --number-unavailable: 215 20% 25%;
+    
+    /* Number colors */
+    --num-0: 0 0% 50%;
+    --num-1: 0 72% 55%;
+    --num-2: 25 95% 55%;
+    --num-3: 50 95% 55%;
+    --num-4: 140 70% 45%;
+    --num-5: 195 85% 55%;
+    --num-6: 260 70% 55%;
+    --num-7: 280 65% 55%;
+    --num-8: 330 70% 60%;
+    --num-9: 0 0% 60%;
+    
+    /* Gradients */
+    --gradient-coin: linear-gradient(135deg, hsl(38 92% 55%), hsl(28 90% 45%));
+    --gradient-display: linear-gradient(180deg, hsl(222 47% 3%), hsl(222 47% 6%));
+    --gradient-card: linear-gradient(145deg, hsl(222 47% 10%), hsl(222 47% 7%));
+    --gradient-rainbow: linear-gradient(135deg, hsl(0 80% 60%), hsl(60 80% 60%), hsl(120 80% 60%), hsl(200 80% 60%), hsl(280 80% 60%));
+    
+    /* Shadows */
+    --shadow-coin: 0 0 20px hsl(38 92% 50% / 0.4);
+    --shadow-card: 0 8px 32px hsl(222 47% 0% / 0.5);
+    --shadow-button: 0 4px 12px hsl(222 47% 0% / 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer utilities {
+  .coin-glow {
+    box-shadow: var(--shadow-coin);
+  }
+  
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .button-shadow {
+    box-shadow: var(--shadow-button);
+  }
+  
+  .bg-gradient-rainbow {
+    background: var(--gradient-rainbow);
+  }
+}
